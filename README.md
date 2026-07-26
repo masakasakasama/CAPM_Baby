@@ -1,8 +1,8 @@
-# CAPM Baby
+# CAPM
 
 An English-first, German-supported CAPM learning web app with a soft pink and
 light-blue visual system. It is designed for a phone, works without a ChatGPT
-account, and keeps progress synchronized through a private, unguessable URL.
+account, and keeps progress synchronized through one default URL.
 
 ## Learning structure
 
@@ -52,17 +52,15 @@ PMI, CAPM, and PMBOK are marks of Project Management Institute, Inc.
 
 ## Progress sync
 
-Opening the site creates a URL with a random `sync` identifier. Bookmark or
-share that exact URL with the learner's other device. Progress is stored in a
-server-side D1 record keyed by that identifier; a namespaced browser cache is
-only a fast/offline fallback.
+Every device opening the default production URL reads and updates the same
+server-side D1 document. A namespaced browser cache is only a fast/offline
+fallback.
 
 - No ChatGPT login or account is used.
-- The same private link synchronizes progress across phones and computers.
+- The default URL synchronizes progress across phones and computers.
 - Manual refresh and background refresh are included.
-- Losing the private link means losing access to that progress record.
-- Anyone who has the private link can read and update that record, so it should
-  not be posted publicly.
+- Because the public site has no authentication, anyone who knows its URL can
+  read and update the shared learning record.
 
 ## Local development
 
@@ -85,7 +83,6 @@ two-course structure, source boundaries, and D1 migration.
 - `app/data.ts` — original question bank and public source register
 - `app/study.ts` — Course 1 and Course 2 learning content
 - `app/progress.ts` — readiness and spaced-repetition rules
-- `app/api/progress/route.ts` — anonymous private-link sync API
+- `app/api/progress/route.ts` — anonymous default-link sync API
 - `db/` and `drizzle/` — D1 schema and migration
 - `HANDOFF.md` — operational and content-maintenance notes
-

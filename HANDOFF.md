@@ -1,11 +1,10 @@
-# CAPM Baby handoff
+# CAPM handoff
 
 ## Product contract
 
-CAPM Baby is a public, mobile-first study site. Do not add ChatGPT sign-in,
-workspace authentication, or a local-only deployment. The intended learner
-opens the production URL on a phone and shares the exact private sync URL across
-devices.
+CAPM is a public, mobile-first study site. Do not add ChatGPT sign-in,
+workspace authentication, or a local-only deployment. Every device uses the
+same default production URL and shared progress record.
 
 The presentation contract is:
 
@@ -47,16 +46,17 @@ Run `npm test` after changing content or scoring logic.
 
 ## Sync behavior
 
-`/api/progress?id=<uuid>` reads and writes one JSON progress document in D1.
-The UUID appears in the learner's URL. There is no identity system.
+`/api/progress` reads and writes one shared JSON progress document in D1.
+Legacy `?sync=<uuid>` records remain readable only so an old link can seed the
+shared record during migration. There is no identity system.
 
-The browser cache key is namespaced as `capm-baby:progress:v1:<uuid>`. It exists
-for startup speed and temporary offline use, not as the source of truth. The
-server record is authoritative whenever it is reachable.
+The browser cache key is namespaced as `capm:progress:v2:capm-default-v1`. It
+exists for startup speed and temporary offline use, not as the source of truth.
+The server record is authoritative whenever it is reachable.
 
-Security tradeoff: the URL is a bearer secret. There is intentionally no
-account recovery. Avoid logging the full query string and never place a real
-learner's sync URL in screenshots, issues, analytics, or documentation.
+Security tradeoff: without authentication, anyone who can open the public site
+can read and update the shared learning record. The progress data must not hold
+sensitive or personal information.
 
 ## Release checklist
 
@@ -65,7 +65,6 @@ learner's sync URL in screenshots, issues, analytics, or documentation.
 3. Run `npm test`.
 4. Build and deploy the exact committed source state.
 5. Test the production root on a phone-sized browser.
-6. Confirm the URL gains a random `sync` parameter.
-7. Confirm progress survives a second device using the same exact URL.
+6. Confirm the URL does not gain a `sync` parameter.
+7. Confirm progress survives a second device using the default URL.
 8. Confirm no login screen or workspace restriction is enabled.
-

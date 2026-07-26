@@ -1188,6 +1188,52 @@ details p {
   display: none;
 }
 
+.overview-journey .flow-node {
+  min-height: 260px;
+  overflow: visible;
+  padding: 20px 16px 22px;
+}
+
+.journey-icon {
+  display: grid;
+  width: 112px;
+  height: 82px;
+  margin-bottom: 14px;
+  place-items: center;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 25% 20%, rgba(255, 255, 255, 0.95), transparent 34%),
+    var(--pink-soft);
+  color: var(--pink-dark);
+  box-shadow: 0 12px 26px rgba(75, 83, 128, 0.1);
+  transform: rotate(-2deg);
+}
+
+.journey-icon svg {
+  width: 82px;
+  height: 62px;
+}
+
+.journey-icon-2,
+.journey-icon-6 {
+  background-color: var(--blue-soft);
+  color: var(--blue-dark);
+  transform: rotate(2deg);
+}
+
+.journey-icon-3,
+.journey-icon-5 {
+  background-color: var(--mint-soft);
+  color: #318f7d;
+}
+
+.journey-icon-4 {
+  background-color: var(--lilac-soft);
+  color: #7c67d9;
+  transform: rotate(2deg);
+}
+
 .lens-board,
 .scenario-board,
 .approach-board,
@@ -2726,6 +2772,21 @@ details p {
 
   .overview-journey .flow-node:nth-child(3) > i {
     display: block;
+  }
+
+  .overview-journey .flow-node {
+    min-height: 210px;
+  }
+
+  .journey-icon {
+    width: 100px;
+    height: 72px;
+    margin-bottom: 10px;
+  }
+
+  .journey-icon svg {
+    width: 74px;
+    height: 54px;
   }
 
   .lens-grid {

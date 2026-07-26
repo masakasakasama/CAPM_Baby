@@ -23,7 +23,7 @@ export async function generateMetadata(): Promise<Metadata> {
     requestHeaders.get("x-forwarded-proto") ||
     (host.startsWith("localhost") ? "http" : "https");
   const origin = `${protocol}://${host}`;
-  const title = "CAPM Baby — English × Deutsch";
+  const title = "CAPM — English × Deutsch";
   const description =
     "A visual, bilingual CAPM study app with original diagrams, spaced review, a 48-question bank, and shared progress.";
 
@@ -43,7 +43,7 @@ export async function generateMetadata(): Promise<Metadata> {
           url: `${origin}/og.png`,
           width: 1733,
           height: 908,
-          alt: "CAPM Baby — Learn in English, anchor in German",
+          alt: "CAPM — Learn in English, anchor in German",
         },
       ],
     },

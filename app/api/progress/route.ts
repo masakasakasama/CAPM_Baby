@@ -3,10 +3,15 @@ import { ensureProgressSchema, getDb } from "../../../db";
 import { progressDocuments } from "../../../db/schema";
 
 const SYNC_ID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const DEFAULT_SYNC_ID = "capm-default-v1";
 const MAX_DOCUMENT_BYTES = 500_000;
 
 function syncIdFrom(request: Request) {
-  return new URL(request.url).searchParams.get("sync")?.trim() ?? "";
+  return new URL(request.url).searchParams.get("sync")?.trim() || DEFAULT_SYNC_ID;
+}
+
+function validSyncId(syncId: string) {
+  return syncId === DEFAULT_SYNC_ID || SYNC_ID.test(syncId);
 }
 
 function validDocument(value: unknown) {
@@ -23,7 +28,7 @@ function validDocument(value: unknown) {
 
 export async function GET(request: Request) {
   const syncId = syncIdFrom(request);
-  if (!SYNC_ID.test(syncId)) {
+  if (!validSyncId(syncId)) {
     return Response.json({ error: "A valid sync link is required." }, { status: 400 });
   }
 
@@ -53,7 +58,7 @@ export async function GET(request: Request) {
 
 export async function PUT(request: Request) {
   const syncId = syncIdFrom(request);
-  if (!SYNC_ID.test(syncId)) {
+  if (!validSyncId(syncId)) {
     return Response.json({ error: "A valid sync link is required." }, { status: 400 });
   }
 

@@ -29,9 +29,12 @@ import { overviewCourse, studyGuides } from "./study";
 type View = "home" | "learn" | "practice" | "exam" | "review" | "sources";
 type SyncStatus = "loading" | "synced" | "saving" | "offline";
 
-const APP_VERSION = "1.0.0";
-const STORAGE_PREFIX = "capm-baby:progress:v1:";
-const EXAM_PREFIX = "capm-baby:exam:v1:";
+const APP_VERSION = "1.1.0";
+const DEFAULT_SYNC_ID = "capm-default-v1";
+const LEGACY_SYNC_ID =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const STORAGE_PREFIX = "capm:progress:v2:";
+const EXAM_PREFIX = "capm:exam:v2:";
 
 const navItems: { id: View; label: string; de: string; icon: string }[] = [
   { id: "home", label: "Overview", de: "Übersicht", icon: "⌂" },
@@ -70,6 +73,79 @@ function localDateInput(date = new Date()) {
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const day = String(date.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
+}
+
+function JourneyIcon({ kind }: { kind: number }) {
+  const common = {
+    viewBox: "0 0 96 72",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 3,
+    strokeLinecap: "round" as const,
+    strokeLinejoin: "round" as const,
+    "aria-hidden": true,
+  };
+
+  if (kind === 0) {
+    return (
+      <svg {...common}>
+        <circle cx="39" cy="31" r="18" />
+        <path d="m52 44 18 17" />
+        <path d="M32 31h14M39 24v14" />
+        <path d="M67 16c5-7 15-2 11 5-2 4-7 7-11 11-4-4-9-7-11-11-4-7 6-12 11-5Z" />
+      </svg>
+    );
+  }
+  if (kind === 1) {
+    return (
+      <svg {...common}>
+        <circle cx="47" cy="36" r="25" />
+        <circle cx="47" cy="36" r="15" />
+        <circle cx="47" cy="36" r="5" />
+        <path d="M68 15 84 7l-5 16-12 12M78 14l-8 8" />
+      </svg>
+    );
+  }
+  if (kind === 2) {
+    return (
+      <svg {...common}>
+        <circle cx="17" cy="36" r="6" />
+        <circle cx="77" cy="14" r="6" />
+        <circle cx="77" cy="58" r="6" />
+        <path d="M23 36h18c13 0 12-22 25-22h5M41 36h8c12 0 7 22 22 22" />
+        <path d="m64 9 7 5-7 5M64 53l7 5-7 5" />
+      </svg>
+    );
+  }
+  if (kind === 3) {
+    return (
+      <svg {...common}>
+        <rect x="13" y="10" width="70" height="52" rx="9" />
+        <path d="M25 22h10M25 35h10M25 48h10M43 22h25M43 35h14M43 48h32" />
+        <path d="M43 17v10M57 30v10M67 43v10" />
+      </svg>
+    );
+  }
+  if (kind === 4) {
+    return (
+      <svg {...common}>
+        <rect x="35" y="23" width="26" height="26" rx="6" />
+        <path d="M21 39a28 28 0 0 1 44-22M65 17h-9M65 17v-9" />
+        <path d="M75 33a28 28 0 0 1-44 22M31 55h9M31 55v9" />
+        <path d="m43 36 4 4 8-9" />
+      </svg>
+    );
+  }
+  return (
+    <svg {...common}>
+      <path d="M16 60h65" />
+      <rect x="23" y="39" width="10" height="21" rx="3" />
+      <rect x="43" y="28" width="10" height="32" rx="3" />
+      <rect x="63" y="16" width="10" height="44" rx="3" />
+      <path d="m20 27 12 10 15-16 11 8 20-21" />
+      <path d="m70 8 8 0 0 8" />
+    </svg>
+  );
 }
 
 function ChoiceList({
@@ -201,11 +277,16 @@ export default function Home() {
     if (comparable === lastSynced.current) return true;
     setSyncStatus("saving");
     try {
-      const response = await fetch(`/api/progress?sync=${encodeURIComponent(id)}`, {
+      const response = await fetch(
+        id === DEFAULT_SYNC_ID
+          ? "/api/progress"
+          : `/api/progress?sync=${encodeURIComponent(id)}`,
+        {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(document),
-      });
+        },
+      );
       if (!response.ok) throw new Error("save_failed");
       const payload = (await response.json()) as { updatedAt?: string };
       lastSynced.current = comparable;
@@ -223,9 +304,12 @@ export default function Home() {
     if (!id) return false;
     if (!silent) setSyncStatus("loading");
     try {
-      const response = await fetch(`/api/progress?sync=${encodeURIComponent(id)}`, {
-        cache: "no-store",
-      });
+      const response = await fetch(
+        id === DEFAULT_SYNC_ID
+          ? "/api/progress"
+          : `/api/progress?sync=${encodeURIComponent(id)}`,
+        { cache: "no-store" },
+      );
       if (!response.ok) throw new Error("load_failed");
       const payload = (await response.json()) as {
         exists?: boolean;
@@ -263,14 +347,12 @@ export default function Home() {
     let cancelled = false;
     const boot = async () => {
       const params = new URLSearchParams(window.location.search);
-      const id = params.get("sync") || window.crypto.randomUUID();
-      if (!params.get("sync")) {
-        params.set("sync", id);
-        window.history.replaceState(
-          null,
-          "",
-          `${window.location.pathname}?${params.toString()}`,
-        );
+      const legacyId = params.get("sync");
+      const id = DEFAULT_SYNC_ID;
+      if (legacyId) {
+        params.delete("sync");
+        const query = params.toString();
+        window.history.replaceState(null, "", `${window.location.pathname}${query ? `?${query}` : ""}`);
       }
       setSyncId(id);
 
@@ -285,6 +367,28 @@ export default function Home() {
       } catch {
         cachedProgress = initialProgress;
       }
+
+      if (legacyId && LEGACY_SYNC_ID.test(legacyId)) {
+        try {
+          const response = await fetch(`/api/progress?sync=${encodeURIComponent(legacyId)}`, {
+            cache: "no-store",
+          });
+          const payload = response.ok
+            ? ((await response.json()) as { exists?: boolean; document?: unknown })
+            : null;
+          const legacy = parseSyncDocument(payload?.document);
+          if (payload?.exists && legacy) {
+            cachedProgress = legacy.progress;
+            cachedExam =
+              legacy.activeExam && legacy.activeExam.endsAt > Date.now()
+                ? legacy.activeExam
+                : null;
+          }
+        } catch {
+          // Continue with the shared default record or the device fallback.
+        }
+      }
+
       setProgress(cachedProgress);
       if (cachedExam) setExam(cachedExam);
       setHydrated(true);
@@ -299,7 +403,7 @@ export default function Home() {
     return () => {
       cancelled = true;
     };
-    // The first load resolves the URL sync key before any background save.
+    // The first load migrates an old private-link record, then uses one shared key.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -501,12 +605,13 @@ export default function Home() {
   }
 
   async function copySyncLink() {
+    const defaultUrl = `${window.location.origin}${window.location.pathname}`;
     try {
       await saveCloud(progress, exam);
-      await navigator.clipboard.writeText(window.location.href);
-      setToast("Shared study link copied · Gemeinsamer Link kopiert");
+      await navigator.clipboard.writeText(defaultUrl);
+      setToast("Default CAPM link copied · Standardlink kopiert");
     } catch {
-      window.prompt("Copy this shared study link", window.location.href);
+      window.prompt("Copy the default CAPM link", defaultUrl);
     }
   }
 
@@ -566,7 +671,7 @@ export default function Home() {
           <div><i /><span>{syncLabel()}</span></div>
           <div>
             <button onClick={() => void pullCloud(false)}>Refresh now</button>
-            <button onClick={() => void copySyncLink()}>Share study link</button>
+            <button onClick={() => void copySyncLink()}>Copy default link</button>
           </div>
         </section>
 
@@ -702,6 +807,9 @@ export default function Home() {
           <div className="node-flow nodes-6 overview-journey">
             {overviewCourse.journey.map((node, index) => (
               <div className="flow-node" key={node.label}>
+                <div className={`journey-icon journey-icon-${index + 1}`}>
+                  <JourneyIcon kind={index} />
+                </div>
                 <span>{node.label}</span><strong>{node.title}</strong>
                 <em lang="de">{node.de}</em><small>{node.note}</small>
                 {index < overviewCourse.journey.length - 1 && <i>→</i>}
@@ -1141,16 +1249,16 @@ export default function Home() {
           <section className="panel policy-card">
             <span className="eyebrow">CONTENT & COPYRIGHT</span>
             <h2>Original learning graphics</h2>
-            <p>Visuals are built from original HTML and CSS shapes. No official questions, book pages, tables, or proprietary figures are reproduced.</p>
+            <p>Visuals use original SVG icons plus HTML and CSS shapes created for this site. No official questions, book pages, tables, stock illustrations, or proprietary figures are reproduced.</p>
             <p lang="de">Die Lernbilder sind eigens erstellt. Offizielle Prüfungsfragen und geschützte Abbildungen werden nicht kopiert.</p>
           </section>
           <section className="panel policy-card sync-data-card">
             <span className="eyebrow">SHARED PROGRESS</span>
             <h2>No ChatGPT login</h2>
-            <p>The unguessable link is the key. Open the same link on another phone to load and update the same cloud progress. The device cache is only a fast offline fallback.</p>
-            <p lang="de">Kein ChatGPT-Konto erforderlich. Derselbe Link verbindet beide Geräte mit demselben Lernstand.</p>
+            <p>The default CAPM URL loads and updates one shared cloud record on every device. No special query link is required. The device cache is only a fast offline fallback.</p>
+            <p lang="de">Der Standardlink verbindet alle Geräte automatisch mit demselben Lernstand. Kein ChatGPT-Konto erforderlich.</p>
             <div className={`sync-state ${syncStatus}`}><i />{syncLabel()}</div>
-            <div><button className="button primary" onClick={() => void copySyncLink()}>Copy shared link</button><button className="button secondary" onClick={() => void pullCloud(false)}>Refresh now</button></div>
+            <div><button className="button primary" onClick={() => void copySyncLink()}>Copy default link</button><button className="button secondary" onClick={() => void pullCloud(false)}>Refresh now</button></div>
           </section>
         </div>
         <section className="panel disclaimer">
@@ -1162,14 +1270,14 @@ export default function Home() {
   }
 
   if (!hydrated) {
-    return <main className="loading"><span>CAPM</span><strong>baby</strong><div /></main>;
+    return <main className="loading"><span>CAPM</span><strong>English × Deutsch</strong><div /></main>;
   }
 
   return (
     <div className="app-shell">
       <aside className="sidebar">
         <button className="brand" onClick={() => setView("home")}>
-          <span>CB</span><div><strong>CAPM Baby</strong><small>English × Deutsch</small></div>
+          <span>CP</span><div><strong>CAPM</strong><small>English × Deutsch</small></div>
         </button>
         <nav aria-label="Primary navigation">
           {navItems.map((item) => (
@@ -1184,7 +1292,7 @@ export default function Home() {
           ))}
         </nav>
         <div className="sidebar-card">
-          <span>Study together</span><p>Open one link on both phones.</p><button onClick={() => void copySyncLink()}>Copy shared link</button>
+          <span>Automatic sync</span><p>One default link on every device.</p><button onClick={() => void copySyncLink()}>Copy default link</button>
         </div>
         <div className="sidebar-foot">
           <button onClick={() => setView("sources")}>Sources, data & copyright</button>
@@ -1198,7 +1306,7 @@ export default function Home() {
         {view === "exam" && renderExam()}
         {view === "review" && renderReview()}
         {view === "sources" && renderSources()}
-        <footer className="site-footer"><span>CAPM Baby · unofficial bilingual study tool</span><button onClick={() => setView("sources")}>Sources & copyright</button></footer>
+        <footer className="site-footer"><span>CAPM · unofficial bilingual study tool</span><button onClick={() => setView("sources")}>Sources & copyright</button></footer>
       </main>
       <nav className="bottom-nav" aria-label="Mobile navigation">
         {navItems.map((item) => (

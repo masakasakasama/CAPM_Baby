@@ -100,8 +100,11 @@ test("ships overview and detailed courses with transparent public-source boundar
   assert.match(page, /No ChatGPT login/);
   assert.match(page, /COURSE 1/);
   assert.match(page, /COURSE 02/);
-  assert.match(layout, /CAPM Baby/);
+  assert.match(layout, /CAPM — English × Deutsch/);
   assert.match(layout, /\/og\.png/);
+  assert.match(page, /DEFAULT_SYNC_ID = "capm-default-v1"/);
+  assert.match(page, /JourneyIcon/);
+  assert.doesNotMatch(page, /window\.crypto\.randomUUID/);
   assert.doesNotMatch(page, /codex-preview|SkeletonPreview/);
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
   assert.equal(JSON.parse(hosting).d1, "DB");
