@@ -29,7 +29,7 @@ import { agencyCourse as overviewCourse, studyGuides } from "./study";
 type View = "home" | "learn" | "practice" | "exam" | "review" | "sources";
 type SyncStatus = "loading" | "synced" | "saving" | "offline";
 
-const APP_VERSION = "1.3.0";
+const APP_VERSION = "1.3.1";
 const DEFAULT_SYNC_ID = "capm-default-v1";
 const LEGACY_SYNC_ID =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -75,6 +75,7 @@ function localDateInput(date = new Date()) {
   return `${year}-${month}-${day}`;
 }
 
+/*
 function JourneyIcon({ kind }: { kind: number }) {
   const common = {
     viewBox: "0 0 96 72",
@@ -147,6 +148,7 @@ function JourneyIcon({ kind }: { kind: number }) {
     </svg>
   );
 }
+*/
 
 function CaseIcon({ kind }: { kind: string }) {
   const common = {
@@ -954,28 +956,46 @@ export default function Home() {
           </p>
         </section>
 
-        <section className="panel visual-board phase-board">
+        <section className="panel visual-board official-domain-board">
           <div className="section-heading">
-            <div><span className="eyebrow">SIX PHASES</span><h2>From “Where are the students?” to a tested recruitment path</h2></div>
-            <span>Each phase creates evidence for the next</span>
+            <div><span className="eyebrow">THE OFFICIAL CAPM MAP</span><h2>Definition first. Then the same case inside it.</h2></div>
+            <span>Four official exam domains · 100%</span>
           </div>
-          <div className="node-flow nodes-6 overview-journey">
-            {overviewCourse.journey.map((node, index) => (
-              <div className="flow-node" key={node.label}>
-                <div className={`journey-icon journey-icon-${index + 1}`}><JourneyIcon kind={index} /></div>
-                <span>{node.label}</span><strong>{node.title}</strong>
-                <em lang="de">{node.de}</em>
-                <p className="phase-question">{node.question}</p>
-                <p>{node.actions}</p>
-                <dl>
-                  <div><dt>CREATE</dt><dd>{node.artifact}</dd></div>
-                  <div><dt>CHECK</dt><dd>{node.measure}</dd></div>
-                </dl>
-                <small>{node.note}</small>
-                {index < overviewCourse.journey.length - 1 && <i>→</i>}
-              </div>
+          <div className="official-domain-grid">
+            {overviewCourse.officialDomains.map((item, index) => (
+              <article className={`official-domain domain-card-${index + 1}`} key={item.domain}>
+                <header>
+                  <span>{item.domain}</span>
+                  <strong>{item.weight}</strong>
+                </header>
+                <h3>{item.title}</h3>
+                <h4 lang="de">{item.de}</h4>
+                <section className="domain-definition">
+                  <span>OFFICIAL SCOPE · DEFINITION</span>
+                  <p>{item.definition}</p>
+                  <p lang="de">{item.definitionDe}</p>
+                </section>
+                <section className="domain-case">
+                  <span>IN THIS CASE · IM BEISPIEL</span>
+                  <p>{item.example}</p>
+                  <p lang="de">{item.exampleDe}</p>
+                </section>
+                <footer><span>EVIDENCE</span><strong>{item.evidence}</strong></footer>
+              </article>
             ))}
           </div>
+          <p className="official-note">
+            These are exam-content domains, not chronological project phases. Predictive, adaptive, and
+            business-analysis practices may connect across the domains.
+          </p>
+          <a
+            className="official-source"
+            href="https://www.pmi.org/-/media/pmi/documents/public/pdf/certifications/capm-exam-content-outline-english.pdf"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Source: PMI CAPM Examination Content Outline (2023 Exam Update) ↗
+          </a>
         </section>
 
         <div className="overview-columns channel-funnel-layout">
@@ -1221,7 +1241,7 @@ export default function Home() {
             <h2>{overviewCourse.title}</h2>
             <h3 lang="de">{overviewCourse.titleDe}</h3>
             <p>{overviewCourse.lead}</p>
-            <div className="course-route">{overviewCourse.journey.map((item) => <span key={item.label}>{item.label}</span>)}</div>
+            <div className="course-route">{overviewCourse.officialDomains.map((item) => <span key={item.domain}>{item.domain} · {item.weight}</span>)}</div>
           </div>
           <div className="course-one-action">
             <strong>{progress.completedUnits.includes(0) ? "✓ Complete" : "35 min"}</strong>

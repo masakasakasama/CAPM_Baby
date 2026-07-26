@@ -10,9 +10,10 @@ account, and keeps progress synchronized through one default URL.
 
 A cross-domain case follows an agency that already works with one Japanese
 language school and must discover how to find suitable international students.
-Original diagrams explain the ecosystem, six recruitment phases, four channel
-tests, a quality funnel, a hybrid delivery model, an eight-week pilot, and the
-path from activity to benefit. It connects:
+The course first defines the four official CAPM Exam Content Outline domains,
+then places the agency case inside each definition. Original diagrams explain
+the ecosystem, four channel tests, a quality funnel, a hybrid delivery model,
+an eight-week pilot, and the path from activity to benefit. It connects:
 
 - project-management fundamentals and core concepts;
 - predictive, plan-based methods;

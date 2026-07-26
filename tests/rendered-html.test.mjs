@@ -89,7 +89,8 @@ test("does not overstate readiness after a small number of answers", () => {
 });
 
 test("ships overview and detailed courses with transparent public-source boundaries", async () => {
-  assert.equal(overviewCourse.journey.length, 6);
+  assert.equal(overviewCourse.officialDomains.length, 4);
+  assert.deepEqual(overviewCourse.officialDomains.map((item) => item.weight), ["36%", "17%", "20%", "27%"]);
   assert.equal(overviewCourse.ecosystem.length, 5);
   assert.equal(overviewCourse.channels.length, 4);
   assert.equal(overviewCourse.funnel.length, 6);
@@ -111,18 +112,19 @@ test("ships overview and detailed courses with transparent public-source boundar
   assert.match(page, /No ChatGPT login/);
   assert.match(page, /COURSE 1/);
   assert.match(page, /COURSE 02/);
+  assert.match(page, /THE OFFICIAL CAPM MAP/);
+  assert.match(page, /These are exam-content domains, not chronological project phases/);
   assert.match(layout, /CAPM — English × Deutsch/);
   assert.match(layout, /\/og\.png/);
   assert.match(page, /DEFAULT_SYNC_ID = "capm-default-v1"/);
-  assert.match(page, /JourneyIcon/);
   assert.match(page, /function BeginnerQuestions/);
   assert.match(page, /ANFÄNGERFRAGEN/);
   assert.match(page, /<BeginnerQuestions question=\{practiceQuestion\}/);
   assert.doesNotMatch(page, /window\.crypto\.randomUUID/);
   assert.doesNotMatch(page, /codex-preview|SkeletonPreview/);
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
-  assert.equal(JSON.parse(packageJson).version, "1.3.0");
-  assert.match(page, /const APP_VERSION = "1\.3\.0"/);
+  assert.equal(JSON.parse(packageJson).version, "1.3.1");
+  assert.match(page, /const APP_VERSION = "1\.3\.1"/);
   assert.equal(JSON.parse(hosting).d1, "DB");
   assert.match(migration, /CREATE TABLE `progress_documents`/);
 });

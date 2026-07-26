@@ -91,66 +91,66 @@ export const agencyCourse = {
     { icon: "school", title: "Japanese language school", de: "Japanische Sprachschule", note: "Offer, requirements, capacity, decision" },
     { icon: "cap", title: "Enrolled learner", de: "Eingeschriebene Person", note: "Good fit, prepared start, learning outcome" },
   ],
-  journey: [
+  officialDomains: [
     {
-      label: "UNDERSTAND",
-      title: "Know the school and the learner",
-      de: "Schule und Lernende verstehen",
-      question: "Who can genuinely benefit from this school?",
-      actions: "Confirm intake dates, fees, courses, support, entry conditions, and interview current students.",
-      artifact: "Student–school fit profile",
-      measure: "School facts confirmed; 5 learner interviews",
-      note: "D4 + D1",
+      domain: "D1",
+      weight: "36%",
+      title: "Project Management Fundamentals and Core Concepts",
+      de: "Grundlagen und Kernkonzepte des Projektmanagements",
+      definition:
+        "The foundation: project life cycles and processes, planning, roles and responsibilities, planned strategies, ethics, and common problem-solving tools.",
+      definitionDe:
+        "Dieser Bereich bildet die Grundlage: Projektlebenszyklen und Prozesse, Planung, Rollen, Verantwortlichkeiten, Strategien, Ethik und Problemlösungswerkzeuge.",
+      example:
+        "The agency defines the project purpose and benefit, identifies the agency owner, school admissions staff, students, alumni, and partners, chooses a hybrid approach, and records privacy and misleading-advertising risks.",
+      exampleDe:
+        "Die Agentur klärt Zweck und Nutzen, benennt Verantwortliche und Beteiligte, wählt ein hybrides Vorgehen und dokumentiert Datenschutz- sowie Werberisiken.",
+      evidence: "Project charter · stakeholder register · risk register · benefit measures",
     },
     {
-      label: "FIND",
-      title: "Test where students can be reached",
-      de: "Kontaktwege testen",
-      question: "Where do suitable students already ask for help?",
-      actions: "Test alumni referrals, local education partners, multilingual webinars, and focused online content.",
-      artifact: "Channel test cards",
-      measure: "Qualified inquiries per channel",
-      note: "D3 + D4",
+      domain: "D2",
+      weight: "17%",
+      title: "Predictive, Plan-Based Methodologies",
+      de: "Prädiktive, planbasierte Methoden",
+      definition:
+        "Use a plan-based approach when important work and constraints can be defined: break down scope, sequence work, estimate, schedule, assure quality, and control changes.",
+      definitionDe:
+        "Wenn Arbeit und Rahmenbedingungen weitgehend feststehen, werden Umfang, Reihenfolge, Schätzungen, Termine, Qualität und Änderungen planbasiert gesteuert.",
+      example:
+        "The school’s intake date, application documents, review steps, and hand-offs are stable. The agency turns them into tasks, owners, dependencies, milestones, and a status board.",
+      exampleDe:
+        "Aufnahmetermin, Bewerbungsunterlagen, Prüfungen und Übergaben stehen fest. Die Agentur macht daraus Aufgaben, Verantwortliche, Abhängigkeiten und Meilensteine.",
+      evidence: "Work breakdown · application schedule · milestones · change log",
     },
     {
-      label: "QUALIFY",
-      title: "Check readiness and fit",
-      de: "Eignung und Bereitschaft prüfen",
-      question: "Is this a real match—not merely a lead?",
-      actions: "Ask about learning goal, start date, budget, education history, and document readiness with consent.",
-      artifact: "Short qualification checklist",
-      measure: "Qualified inquiry rate",
-      note: "D4",
+      domain: "D3",
+      weight: "20%",
+      title: "Agile Frameworks and Methodologies",
+      de: "Agile Frameworks und Methoden",
+      definition:
+        "Use adaptive work when the answer is uncertain: prioritize a small test, deliver it, review evidence with stakeholders, and adapt the next test.",
+      definitionDe:
+        "Wenn die Lösung noch unsicher ist, wird ein kleiner Versuch priorisiert, umgesetzt, gemeinsam ausgewertet und anschließend angepasst.",
+      example:
+        "The agency does not know whether alumni referrals, local partners, webinars, or paid campaigns will find suitable students. It tests two channels for two weeks and compares qualified conversations—not clicks.",
+      exampleDe:
+        "Die Agentur kennt den besten Kontaktkanal noch nicht. Sie testet zwei Wege zwei Wochen lang und vergleicht passende Beratungsgespräche statt bloßer Klicks.",
+      evidence: "Experiment backlog · two-week test · review · next-channel decision",
     },
     {
-      label: "MATCH",
-      title: "Explain the choice honestly",
-      de: "Die Wahl ehrlich erklären",
-      question: "Can the student decide with clear facts?",
-      actions: "Explain curriculum, total cost, location, support, requirements, and limitations. Record open questions.",
-      artifact: "Fit summary for student and school",
-      measure: "Informed consultation completed",
-      note: "D1 + D4",
-    },
-    {
-      label: "APPLY",
-      title: "Guide a complete application",
-      de: "Eine vollständige Bewerbung begleiten",
-      question: "What must happen, by whom, and by when?",
-      actions: "Use a document checklist, owners, hand-off dates, school review, and application status board.",
-      artifact: "Application tracker",
-      measure: "Complete applications submitted on time",
-      note: "D2",
-    },
-    {
-      label: "LEARN",
-      title: "Improve the path with evidence",
-      de: "Den Weg mit Daten verbessern",
-      question: "Which path creates suitable enrollments?",
-      actions: "Compare channel quality, applications, acceptance, enrollment, and early attendance. Stop weak tests; expand strong ones.",
-      artifact: "Recruitment playbook",
-      measure: "Good-fit enrollments and early retention",
-      note: "D3 + D1",
+      domain: "D4",
+      weight: "27%",
+      title: "Business Analysis Frameworks",
+      de: "Frameworks der Business-Analyse",
+      definition:
+        "Discover the business need and stakeholder requirements, communicate them, trace them into the solution, and validate whether the result solved the original need.",
+      definitionDe:
+        "Geschäftsbedarf und Anforderungen werden ermittelt, abgestimmt, bis zur Lösung nachverfolgt und am tatsächlichen Ergebnis validiert.",
+      example:
+        "The agency interviews the school and learners, defines student–school fit criteria, checks each consultation against them, and later validates complete applications, suitable enrollments, and early retention.",
+      exampleDe:
+        "Die Agentur befragt Schule und Lernende, definiert Passungskriterien, nutzt sie in der Beratung und prüft später vollständige Bewerbungen, passende Einschreibungen und den frühen Verbleib.",
+      evidence: "Need statement · fit requirements · traceability · outcome review",
     },
   ],
   funnel: [
