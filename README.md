@@ -25,6 +25,7 @@ terms, worked reasoning, and practice links.
 ## Practice and readiness
 
 - 48 original bilingual practice questions, 12 per domain.
+- 96 question-specific German beginner answers, revealed only after answering.
 - A 30-question weighted mock drawn from the larger bank.
 - Confidence-aware spaced repetition and complete attempt history.
 - Readiness based on coverage, whole-bank accuracy, study completion, repeated
@@ -81,6 +82,7 @@ two-course structure, source boundaries, and D1 migration.
 
 - `app/page.tsx` — learning interface and interaction flow
 - `app/data.ts` — original question bank and public source register
+- `app/beginner-faqs.ts` — plain-language German beginner questions and examples
 - `app/study.ts` — Course 1 and Course 2 learning content
 - `app/progress.ts` — readiness and spaced-repetition rules
 - `app/api/progress/route.ts` — anonymous default-link sync API

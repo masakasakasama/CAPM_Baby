@@ -1,3 +1,8 @@
+import {
+  beginnerFaqsById,
+  type BeginnerFaq,
+} from "./beginner-faqs.ts";
+
 export type Unit = {
   id: number;
   title: string;
@@ -20,6 +25,7 @@ export type Question = {
   points: 1 | 2;
   keyword: string;
   explanationDe: string;
+  beginnerFaqs: BeginnerFaq[];
   source: string;
 };
 
@@ -148,6 +154,7 @@ export const questions: Question[] = questionSeeds.map(
     points: kind === "multiple" ? 2 : 1,
     keyword,
     explanationDe,
+    beginnerFaqs: beginnerFaqsById[id] ?? [],
     source: `CAPM ECO 2023 · ${eo}`,
   }),
 );

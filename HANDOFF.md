@@ -32,6 +32,11 @@ New learning material must be independently worded. Prefer original HTML/CSS
 diagrams; when an external asset is truly needed, store its author, license,
 source URL, and retrieval date alongside it.
 
+Beginner Q&A must not explain one unfamiliar term with another unfamiliar term.
+Start with ordinary German, use a concrete situation or small numerical example
+where useful, and only then connect the explanation to the CAPM term. Keep the
+Q&A hidden until the learner has answered the question.
+
 ## Learning data invariants
 
 - The practice bank must remain larger than the mock.

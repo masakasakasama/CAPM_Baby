@@ -29,7 +29,7 @@ import { overviewCourse, studyGuides } from "./study";
 type View = "home" | "learn" | "practice" | "exam" | "review" | "sources";
 type SyncStatus = "loading" | "synced" | "saving" | "offline";
 
-const APP_VERSION = "1.1.0";
+const APP_VERSION = "1.2.0";
 const DEFAULT_SYNC_ID = "capm-default-v1";
 const LEGACY_SYNC_ID =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -196,6 +196,26 @@ function ChoiceList({
         );
       })}
     </div>
+  );
+}
+
+function BeginnerQuestions({ question }: { question: Question }) {
+  return (
+    <section className="beginner-faqs" lang="de" aria-label="Fragen für Einsteiger">
+      <header>
+        <span>ANFÄNGERFRAGEN</span>
+        <strong>Was bedeutet das eigentlich?</strong>
+        <p>Tippe auf eine Frage. Die Erklärung beginnt ohne Fachsprache und nutzt ein konkretes Beispiel.</p>
+      </header>
+      <div>
+        {question.beginnerFaqs.map((faq) => (
+          <details key={faq.questionDe}>
+            <summary>{faq.questionDe}</summary>
+            <p>{faq.answerDe}</p>
+          </details>
+        ))}
+      </div>
+    </section>
   );
 }
 
@@ -1076,6 +1096,7 @@ export default function Home() {
               <div className="feedback-title"><span>{answerCorrect ? "✓" : "↻"}</span><div><strong>{answerCorrect ? "Correct" : "Not quite"}</strong><em lang="de">{answerCorrect ? "Richtig" : "Noch nicht"}</em></div></div>
               <p lang="de">{practiceQuestion.explanationDe}</p>
               <div className="feedback-meta"><span>{practiceQuestion.keyword}</span><span>{practiceQuestion.source}</span></div>
+              <BeginnerQuestions question={practiceQuestion} />
               <div className="confidence-box">
                 <div><strong>How sure were you?</strong><span lang="de">Wie sicher warst du?</span></div>
                 <div className="confidence-options">
@@ -1200,6 +1221,7 @@ export default function Home() {
                   <h2>{question.prompt}</h2>
                   <p className="correct-line"><strong>Correct:</strong> {question.correct.map((index) => question.options[index]).join(" · ")}</p>
                   <p lang="de">{question.explanationDe}</p>
+                  <BeginnerQuestions question={question} />
                   <footer><span>{question.keyword} · next {formatDate(stats.nextReviewAt)}</span><div><button className="button compact secondary" onClick={() => beginPractice(question.unit)}>Practice domain</button><button className="text-button" onClick={() => setProgress((current) => ({ ...current, review: current.review.filter((id) => id !== question.id) }))}>Mark mastered</button></div></footer>
                 </article>
               );

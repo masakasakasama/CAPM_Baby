@@ -32,6 +32,12 @@ test("covers the public CAPM domain map with an original bilingual bank", () => 
   for (const question of questions) {
     assert.ok(question.prompt.length > 20);
     assert.ok(question.explanationDe.length > 20);
+    assert.ok(question.beginnerFaqs.length >= 2);
+    assert.ok(
+      question.beginnerFaqs.every(
+        (faq) => faq.questionDe.length > 12 && faq.answerDe.length > 100,
+      ),
+    );
     assert.ok(question.correct.length >= 1);
     assert.ok(
       question.correct.every(
@@ -104,9 +110,14 @@ test("ships overview and detailed courses with transparent public-source boundar
   assert.match(layout, /\/og\.png/);
   assert.match(page, /DEFAULT_SYNC_ID = "capm-default-v1"/);
   assert.match(page, /JourneyIcon/);
+  assert.match(page, /function BeginnerQuestions/);
+  assert.match(page, /ANFÄNGERFRAGEN/);
+  assert.match(page, /<BeginnerQuestions question=\{practiceQuestion\}/);
   assert.doesNotMatch(page, /window\.crypto\.randomUUID/);
   assert.doesNotMatch(page, /codex-preview|SkeletonPreview/);
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
+  assert.equal(JSON.parse(packageJson).version, "1.2.0");
+  assert.match(page, /const APP_VERSION = "1\.2\.0"/);
   assert.equal(JSON.parse(hosting).d1, "DB");
   assert.match(migration, /CREATE TABLE `progress_documents`/);
 });
