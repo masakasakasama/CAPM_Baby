@@ -29,7 +29,7 @@ import { agencyCourse as overviewCourse, studyGuides } from "./study";
 type View = "home" | "learn" | "practice" | "exam" | "review" | "sources";
 type SyncStatus = "loading" | "synced" | "saving" | "offline";
 
-const APP_VERSION = "1.3.1";
+const APP_VERSION = "1.3.2";
 const DEFAULT_SYNC_ID = "capm-default-v1";
 const LEGACY_SYNC_ID =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -971,7 +971,7 @@ export default function Home() {
                 <h3>{item.title}</h3>
                 <h4 lang="de">{item.de}</h4>
                 <section className="domain-definition">
-                  <span>OFFICIAL SCOPE · DEFINITION</span>
+                  <span>OFFICIAL TASK SCOPE · PLAIN-LANGUAGE SUMMARY</span>
                   <p>{item.definition}</p>
                   <p lang="de">{item.definitionDe}</p>
                 </section>
@@ -985,8 +985,9 @@ export default function Home() {
             ))}
           </div>
           <p className="official-note">
-            These are exam-content domains, not chronological project phases. Predictive, adaptive, and
-            business-analysis practices may connect across the domains.
+            PMI defines a domain as a high-level knowledge area, then specifies tasks and illustrative
+            enablers. The summaries above paraphrase those task scopes. They are exam-content domains,
+            not chronological project phases.
           </p>
           <a
             className="official-source"
