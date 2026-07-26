@@ -14,7 +14,7 @@ import {
   initialProgress,
   upsertAnswerAttempt,
 } from "../app/progress.ts";
-import { overviewCourse, studyGuides } from "../app/study.ts";
+import { agencyCourse as overviewCourse, studyGuides } from "../app/study.ts";
 
 test("covers the public CAPM domain map with an original bilingual bank", () => {
   assert.equal(units.length, 4);
@@ -90,6 +90,11 @@ test("does not overstate readiness after a small number of answers", () => {
 
 test("ships overview and detailed courses with transparent public-source boundaries", async () => {
   assert.equal(overviewCourse.journey.length, 6);
+  assert.equal(overviewCourse.ecosystem.length, 5);
+  assert.equal(overviewCourse.channels.length, 4);
+  assert.equal(overviewCourse.funnel.length, 6);
+  assert.equal(overviewCourse.pilot.length, 8);
+  assert.match(overviewCourse.lead, /Japanese language school/);
   assert.equal(studyGuides.length, 4);
   assert.ok(studyGuides.every((guide) => guide.terms.length >= 6));
   assert.ok(sources.some((source) => source.id === "capm-eco"));
@@ -116,8 +121,8 @@ test("ships overview and detailed courses with transparent public-source boundar
   assert.doesNotMatch(page, /window\.crypto\.randomUUID/);
   assert.doesNotMatch(page, /codex-preview|SkeletonPreview/);
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
-  assert.equal(JSON.parse(packageJson).version, "1.2.0");
-  assert.match(page, /const APP_VERSION = "1\.2\.0"/);
+  assert.equal(JSON.parse(packageJson).version, "1.3.0");
+  assert.match(page, /const APP_VERSION = "1\.3\.0"/);
   assert.equal(JSON.parse(hosting).d1, "DB");
   assert.match(migration, /CREATE TABLE `progress_documents`/);
 });

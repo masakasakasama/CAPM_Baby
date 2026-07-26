@@ -24,12 +24,12 @@ import {
   type MockResult,
   type Progress,
 } from "./progress";
-import { overviewCourse, studyGuides } from "./study";
+import { agencyCourse as overviewCourse, studyGuides } from "./study";
 
 type View = "home" | "learn" | "practice" | "exam" | "review" | "sources";
 type SyncStatus = "loading" | "synced" | "saving" | "offline";
 
-const APP_VERSION = "1.2.0";
+const APP_VERSION = "1.3.0";
 const DEFAULT_SYNC_ID = "capm-default-v1";
 const LEGACY_SYNC_ID =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -146,6 +146,23 @@ function JourneyIcon({ kind }: { kind: number }) {
       <path d="m70 8 8 0 0 8" />
     </svg>
   );
+}
+
+function CaseIcon({ kind }: { kind: string }) {
+  const common = {
+    viewBox: "0 0 64 64",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 2.8,
+    strokeLinecap: "round" as const,
+    strokeLinejoin: "round" as const,
+    "aria-hidden": true,
+  };
+  if (kind === "people") return <svg {...common}><circle cx="24" cy="21" r="7" /><circle cx="43" cy="24" r="6" /><path d="M10 49c1-11 7-17 14-17s13 6 14 17M36 37c2-4 5-6 9-6 6 0 10 5 11 14" /><path d="M14 10c5-4 11-6 18-5M48 11c3 2 5 5 6 8" /></svg>;
+  if (kind === "signal") return <svg {...common}><path d="M12 49h40M18 43V31M31 43V22M44 43V14" /><circle cx="18" cy="27" r="3" /><circle cx="31" cy="18" r="3" /><circle cx="44" cy="10" r="3" /><path d="M11 15c5-5 11-8 18-9M9 24c4-3 8-5 13-6" /></svg>;
+  if (kind === "handshake") return <svg {...common}><path d="m8 23 10-7 10 5 8-3 19 11-9 17-9-1-8 5-15-12Z" /><path d="m23 25 8-5 7 5 9 5M21 37l11 7M27 33l12 8M34 29l10 7" /><path d="m8 23 8 15M55 29l-9 17" /></svg>;
+  if (kind === "school") return <svg {...common}><path d="m8 25 24-14 24 14M13 27h38v27H13zM8 55h48" /><path d="M22 32v14M32 32v14M42 32v14M28 54V43h8v11" /></svg>;
+  return <svg {...common}><path d="M8 24 32 13l24 11-24 11Z" /><path d="M18 30v11c7 7 21 7 28 0V30M54 25v16" /><path d="M20 51h24M27 47v8M37 47v8" /></svg>;
 }
 
 function ChoiceList({
@@ -784,7 +801,8 @@ export default function Home() {
     );
   }
 
-  function renderOverviewCourse() {
+  /*
+  function renderOverviewCourseLegacy() {
     const completed = progress.completedUnits.includes(0);
     return (
       <>
@@ -878,6 +896,205 @@ export default function Home() {
 
         <section className="study-finish panel">
           <div><span className="eyebrow">COURSE 1 CHECKPOINT</span><h2>Now zoom into the four domains.</h2><p lang="de">Wenn die Gesamtgeschichte klar ist, beginnt Course 2 mit den Details.</p><small>{overviewCourse.source}</small></div>
+          <div>
+            <button className={`button ${completed ? "secondary" : "primary"}`} onClick={() => markUnitComplete(0)}>
+              {completed ? "✓ Course 1 complete" : "Mark Course 1 complete"}
+            </button>
+            <button className="button secondary" onClick={() => { setSelectedStudyUnit(null); window.scrollTo({ top: 0, behavior: "smooth" }); }}>Open Course 2</button>
+          </div>
+        </section>
+      </>
+    );
+  }
+
+  */
+  function renderOverviewCourse() {
+    const completed = progress.completedUnits.includes(0);
+    return (
+      <>
+        <button className="back-button" onClick={() => setSelectedStudyUnit(null)}>← Both courses</button>
+        <header className="study-hero overview-course-hero panel">
+          <div>
+            <span className="eyebrow">COURSE 1 · START HERE</span>
+            <h1>{overviewCourse.title}</h1>
+            <h2 lang="de">{overviewCourse.titleDe}</h2>
+            <p>{overviewCourse.lead}</p>
+            <p className="de-copy" lang="de">{overviewCourse.leadDe}</p>
+          </div>
+          <div className="case-snapshot" aria-label="Case starting point">
+            {overviewCourse.caseFacts.map((fact) => (
+              <article className={`case-fact case-fact-${fact.tone}`} key={fact.label}>
+                <span>{fact.label}</span>
+                <strong>{fact.value}</strong>
+                <em lang="de">{fact.de}</em>
+              </article>
+            ))}
+          </div>
+        </header>
+
+        <section className="panel ecosystem-board">
+          <div className="section-heading">
+            <div><span className="eyebrow">THE CASE IN ONE PICTURE</span><h2>How a student reaches the right school</h2></div>
+            <span lang="de">Vom ersten Kontakt bis zum Schulstart</span>
+          </div>
+          <div className="ecosystem-flow">
+            {overviewCourse.ecosystem.map((node, index) => (
+              <article key={node.title}>
+                <div><CaseIcon kind={node.icon} /></div>
+                <strong>{node.title}</strong>
+                <em lang="de">{node.de}</em>
+                <p>{node.note}</p>
+                {index < overviewCourse.ecosystem.length - 1 && <i aria-hidden="true">→</i>}
+              </article>
+            ))}
+          </div>
+          <p className="diagram-note">
+            The agency is the bridge, not the decision-maker. The student chooses, the school decides admission,
+            and immigration authorities decide immigration status.
+          </p>
+        </section>
+
+        <section className="panel visual-board phase-board">
+          <div className="section-heading">
+            <div><span className="eyebrow">SIX PHASES</span><h2>From “Where are the students?” to a tested recruitment path</h2></div>
+            <span>Each phase creates evidence for the next</span>
+          </div>
+          <div className="node-flow nodes-6 overview-journey">
+            {overviewCourse.journey.map((node, index) => (
+              <div className="flow-node" key={node.label}>
+                <div className={`journey-icon journey-icon-${index + 1}`}><JourneyIcon kind={index} /></div>
+                <span>{node.label}</span><strong>{node.title}</strong>
+                <em lang="de">{node.de}</em>
+                <p className="phase-question">{node.question}</p>
+                <p>{node.actions}</p>
+                <dl>
+                  <div><dt>CREATE</dt><dd>{node.artifact}</dd></div>
+                  <div><dt>CHECK</dt><dd>{node.measure}</dd></div>
+                </dl>
+                <small>{node.note}</small>
+                {index < overviewCourse.journey.length - 1 && <i>→</i>}
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <div className="overview-columns channel-funnel-layout">
+          <section className="panel channel-board">
+            <div className="section-heading">
+              <div><span className="eyebrow">WHERE TO LOOK</span><h2>Test four paths to suitable students</h2></div>
+            </div>
+            <div className="channel-grid">
+              {overviewCourse.channels.map((channel, index) => (
+                <article key={channel.title}>
+                  <span>0{index + 1}</span>
+                  <strong>{channel.title}</strong>
+                  <em lang="de">{channel.de}</em>
+                  <b>{channel.strength}</b>
+                  <p><small>SMALL TEST</small>{channel.test}</p>
+                  <p><small>USEFUL SIGNAL</small>{channel.signal}</p>
+                </article>
+              ))}
+            </div>
+          </section>
+          <section className="panel funnel-board">
+            <div className="section-heading">
+              <div><span className="eyebrow">QUALITY FUNNEL</span><h2>Do not count every click as success</h2></div>
+            </div>
+            <p className="diagram-intro">Example from one small pilot. These numbers explain the logic; they are not a promise or forecast.</p>
+            <div className="recruitment-funnel">
+              {overviewCourse.funnel.map((stage, index) => (
+                <article key={stage.label} style={{ width: `${100 - index * 9}%` }}>
+                  <strong>{stage.value}</strong>
+                  <span>{stage.label}</span>
+                  <em lang="de">{stage.de}</em>
+                  <p>{stage.note}</p>
+                </article>
+              ))}
+            </div>
+            <div className="funnel-result"><strong>4 ÷ 120 = 3.3%</strong><span>reached → enrolled</span></div>
+          </section>
+        </div>
+
+        <section className="panel lens-board">
+          <div className="section-heading">
+            <div><span className="eyebrow">CAPM CONNECTION</span><h2>The same case seen through four questions</h2></div>
+            <span>The domains work together</span>
+          </div>
+          <div className="lens-grid">
+            {overviewCourse.lenses.map((lens, index) => (
+              <article className={`domain-card-${index + 1}`} key={lens.domain}>
+                <span>{lens.domain}</span><strong>{lens.title}</strong>
+                <em lang="de">{lens.de}</em><p>{lens.body}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <div className="overview-columns hybrid-layout">
+          <section className="panel hybrid-board">
+            <div className="section-heading">
+              <div><span className="eyebrow">WHY HYBRID?</span><h2>Keep rules stable. Learn where evidence is missing.</h2></div>
+            </div>
+            <div className="hybrid-diagram">
+              <article className="fixed-rail">
+                <span>FIXED PATH · FESTER WEG</span><strong>Plan and control</strong>
+                <ul>{overviewCourse.fixedAndLearning.fixed.map((item) => <li key={item}>{item}</li>)}</ul>
+              </article>
+              <div className="hybrid-bridge"><span>+</span><strong>HYBRID</strong></div>
+              <article className="learning-loop">
+                <span>LEARNING LOOP · LERNSCHLEIFE</span><strong>Test and adapt</strong>
+                <ul>{overviewCourse.fixedAndLearning.learning.map((item) => <li key={item}>{item}</li>)}</ul>
+              </article>
+            </div>
+            <p className="hybrid-summary">{overviewCourse.fixedAndLearning.bridge}</p>
+          </section>
+          <section className="panel pilot-board">
+            <div className="section-heading">
+              <div><span className="eyebrow">8-WEEK PILOT</span><h2>What happens when</h2></div>
+            </div>
+            <div className="pilot-timeline">
+              {overviewCourse.pilot.map((week) => (
+                <article key={week.week}>
+                  <span>{week.week}</span>
+                  <div><strong>{week.title}</strong><em lang="de">{week.de}</em><p>{week.result}</p></div>
+                </article>
+              ))}
+            </div>
+          </section>
+        </div>
+
+        <section className="panel value-chain-board">
+          <div className="section-heading">
+            <div><span className="eyebrow">VALUE, NOT JUST ACTIVITY</span><h2>Follow the result all the way to the benefit</h2></div>
+          </div>
+          <div className="value-chain">
+            {overviewCourse.valueChain.map((item, index) => (
+              <article key={item.label}>
+                <span>{item.label}</span><strong>{item.title}</strong><em lang="de">{item.de}</em>
+                {index < overviewCourse.valueChain.length - 1 && <i>→</i>}
+              </article>
+            ))}
+          </div>
+          <p className="diagram-note">
+            A webinar is an activity. A checklist is an output. A complete, informed application is an outcome.
+            A better-fit enrollment is the benefit.
+          </p>
+        </section>
+
+        <section className="panel anchor-board">
+          <div className="section-heading">
+            <div><span className="eyebrow">VOCABULARY BRIDGE</span><h2>Six words used in this case</h2></div>
+            <span>English first · Deutsch daneben</span>
+          </div>
+          <div>
+            {overviewCourse.anchors.map(([en, de, note]) => (
+              <article key={en}><strong>{en}</strong><em lang="de">{de}</em><p>{note}</p></article>
+            ))}
+          </div>
+        </section>
+
+        <section className="study-finish panel">
+          <div><span className="eyebrow">COURSE 1 CHECKPOINT</span><h2>Can you explain the whole path without CAPM jargon?</h2><p lang="de">Wenn du den gesamten Weg in einfachen Worten erklären kannst, bist du bereit für die vier Detailbereiche in Course 2.</p><small>{overviewCourse.source}</small></div>
           <div>
             <button className={`button ${completed ? "secondary" : "primary"}`} onClick={() => markUnitComplete(0)}>
               {completed ? "✓ Course 1 complete" : "Mark Course 1 complete"}

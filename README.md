@@ -6,10 +6,13 @@ account, and keeps progress synchronized through one default URL.
 
 ## Learning structure
 
-### Course 1 — One project, four lenses
+### Course 1 — One agency, one school, one recruitment challenge
 
-A short cross-domain course follows one clinic-booking project from idea to
-value delivery. It connects:
+A cross-domain case follows an agency that already works with one Japanese
+language school and must discover how to find suitable international students.
+Original diagrams explain the ecosystem, six recruitment phases, four channel
+tests, a quality funnel, a hybrid delivery model, an eight-week pilot, and the
+path from activity to benefit. It connects:
 
 - project-management fundamentals and core concepts;
 - predictive, plan-based methods;
