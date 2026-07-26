@@ -12,8 +12,9 @@ A cross-domain case follows an agency that already works with one Japanese
 language school and must discover how to find suitable international students.
 The course first defines the four official CAPM Exam Content Outline domains,
 then places the agency case inside each definition. Original diagrams explain
-the ecosystem, four channel tests, a quality funnel, a hybrid delivery model,
-an eight-week pilot, and the path from activity to benefit. It connects:
+the case roadmap, official domain map, student/agency/school journey, quality
+funnel, channel comparison, two-week experiment, action plan, metrics, and next
+experiment board. All case copy is English-first with German support. It connects:
 
 - project-management fundamentals and core concepts;
 - predictive, plan-based methods;

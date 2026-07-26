@@ -29,7 +29,7 @@ import { agencyCourse as overviewCourse, studyGuides } from "./study";
 type View = "home" | "learn" | "practice" | "exam" | "review" | "sources";
 type SyncStatus = "loading" | "synced" | "saving" | "offline";
 
-const APP_VERSION = "1.3.2";
+const APP_VERSION = "1.4.0";
 const DEFAULT_SYNC_ID = "capm-default-v1";
 const LEGACY_SYNC_ID =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -150,6 +150,7 @@ function JourneyIcon({ kind }: { kind: number }) {
 }
 */
 
+/*
 function CaseIcon({ kind }: { kind: string }) {
   const common = {
     viewBox: "0 0 64 64",
@@ -166,6 +167,7 @@ function CaseIcon({ kind }: { kind: string }) {
   if (kind === "school") return <svg {...common}><path d="m8 25 24-14 24 14M13 27h38v27H13zM8 55h48" /><path d="M22 32v14M32 32v14M42 32v14M28 54V43h8v11" /></svg>;
   return <svg {...common}><path d="M8 24 32 13l24 11-24 11Z" /><path d="M18 30v11c7 7 21 7 28 0V30M54 25v16" /><path d="M20 51h24M27 47v8M37 47v8" /></svg>;
 }
+*/
 
 function ChoiceList({
   question,
@@ -910,6 +912,7 @@ export default function Home() {
   }
 
   */
+  /*
   function renderOverviewCourse() {
     const completed = progress.completedUnits.includes(0);
     return (
@@ -1120,6 +1123,274 @@ export default function Home() {
             <button className={`button ${completed ? "secondary" : "primary"}`} onClick={() => markUnitComplete(0)}>
               {completed ? "✓ Course 1 complete" : "Mark Course 1 complete"}
             </button>
+            <button className="button secondary" onClick={() => { setSelectedStudyUnit(null); window.scrollTo({ top: 0, behavior: "smooth" }); }}>Open Course 2</button>
+          </div>
+        </section>
+      </>
+    );
+  }
+
+  */
+  function renderOverviewCourse() {
+    const completed = progress.completedUnits.includes(0);
+    const roadmap = [
+      ["01", "⌂", "Understand school fit", "Schulpassung verstehen", "Learn the school, requirements, and goals."],
+      ["02", "♙", "Define ideal students", "Ideale Lernende definieren", "Agree on fit criteria before recruiting."],
+      ["03", "⌁", "Find channels", "Kontaktkanäle finden", "Identify where suitable students already are."],
+      ["04", "⚗", "Test outreach", "Ansprache testen", "Run small tests and measure useful results."],
+      ["05", "☑", "Support application", "Bewerbung begleiten", "Help students submit complete documents."],
+      ["06", "◇", "Enroll and review", "Einschreiben und auswerten", "Review outcomes and improve the path."],
+    ];
+    const domainCards = [
+      {
+        id: "D1", weight: "36%", title: "Fundamentals", de: "Grundlagen",
+        subtitle: "Understand the project and set it up for success.",
+        subtitleDe: "Projektzweck, Beteiligte, Rollen und Risiken verstehen.",
+        steps: [["◎", "Define purpose", "Zweck definieren"], ["♙", "Identify stakeholders", "Beteiligte bestimmen"], ["!", "Assess risks", "Risiken bewerten"], ["☑", "Set success criteria", "Erfolgskriterien setzen"]],
+        caseEn: "Define the purpose, stakeholders, roles, benefits, and risks of recruiting suitable students for one partner school.",
+        caseDe: "Zweck, Beteiligte, Rollen, Nutzen und Risiken der Vermittlung passender Lernender für eine Partnerschule klären.",
+        evidence: ["Project charter", "Stakeholder register", "Risk register", "Benefit measures"],
+      },
+      {
+        id: "D2", weight: "17%", title: "Plan-based work", de: "Planbasierte Arbeit",
+        subtitle: "Plan stable work, dates, dependencies, and resources.",
+        subtitleDe: "Stabile Arbeit, Termine, Abhängigkeiten und Ressourcen planen.",
+        steps: [["▣", "Create intake schedule", "Aufnahmeplan erstellen"], ["☷", "List key tasks", "Aufgaben auflisten"], ["⚑", "Set milestones", "Meilensteine setzen"], ["♙", "Assign roles", "Rollen zuweisen"]],
+        caseEn: "Plan the fixed school intake, document checks, application hand-offs, deadlines, and owners.",
+        caseDe: "Aufnahmetermin, Dokumentenprüfung, Übergaben, Fristen und Verantwortliche planen.",
+        evidence: ["WBS", "Schedule", "Milestone list", "RACI / resources"],
+      },
+      {
+        id: "D3", weight: "20%", title: "Agile testing", de: "Agiles Testen",
+        subtitle: "Adapt quickly, learn from evidence, and improve.",
+        subtitleDe: "Schnell anpassen, aus Daten lernen und verbessern.",
+        steps: [["⚗", "Choose 2 channels", "2 Kanäle wählen"], ["▶", "Run a 2-week test", "2 Wochen testen"], ["▥", "Review results", "Ergebnisse prüfen"], ["↻", "Adjust and continue", "Anpassen und fortsetzen"]],
+        caseEn: "Test two student-acquisition channels for two weeks and compare qualified conversations rather than clicks.",
+        caseDe: "Zwei Kanäle zur Studierendengewinnung zwei Wochen testen und passende Gespräche statt Klicks vergleichen.",
+        evidence: ["Experiment backlog", "Test plan", "Results review", "Decision log"],
+      },
+      {
+        id: "D4", weight: "27%", title: "Business analysis", de: "Business-Analyse",
+        subtitle: "Understand needs and confirm the right solution.",
+        subtitleDe: "Bedarf verstehen und die passende Lösung bestätigen.",
+        steps: [["♙", "Define student profile", "Lernprofil definieren"], ["⌕", "Gather requirements", "Anforderungen erheben"], ["☷", "Validate school fit", "Schulpassung prüfen"], ["✓", "Recommend solution", "Lösung empfehlen"]],
+        caseEn: "Define ideal-student criteria, trace them through consultation, and validate fit with the school.",
+        caseDe: "Kriterien für passende Lernende definieren, in der Beratung nachverfolgen und mit der Schule validieren.",
+        evidence: ["Requirement list", "Traceability matrix", "Fit analysis", "Outcome review"],
+      },
+    ];
+    const journey = [
+      {
+        no: "01", phase: "Awareness", de: "Aufmerksamkeit",
+        student: "Sees useful school information or hears a referral.",
+        agency: "Runs channels and attracts relevant inquiries.",
+        school: "Provides accurate public school information.",
+      },
+      {
+        no: "02", phase: "Discovery", de: "Orientierung",
+        student: "Explores the school, course, costs, and timing.",
+        agency: "Explains options and screens basic needs.",
+        school: "Shares programs, requirements, and capacity.",
+      },
+      {
+        no: "03", phase: "Consultation", de: "Beratung",
+        student: "Asks questions and explains study goals.",
+        agency: "Checks fit and explains limits honestly.",
+        school: "Answers admissions and course questions.",
+      },
+      {
+        no: "04", phase: "Application", de: "Bewerbung",
+        student: "Prepares and submits required documents.",
+        agency: "Guides the checklist and hand-off.",
+        school: "Reviews the application under its own rules.",
+      },
+      {
+        no: "05", phase: "Decision & immigration", de: "Entscheidung und Einreiseverfahren",
+        student: "Receives results and completes required procedures.",
+        agency: "Shares status without promising approval.",
+        school: "Makes its admission decision and may support COE procedures.",
+      },
+      {
+        no: "06", phase: "Enrollment", de: "Einschreibung",
+        student: "Pays applicable fees and prepares to start.",
+        agency: "Provides agreed pre-departure support.",
+        school: "Welcomes and orients the enrolled learner.",
+      },
+    ];
+    const channels = [
+      ["♙", "Alumni referrals", "Empfehlungen", "$", "★★★", "★★★★★"],
+      ["◇", "Local partners", "Lokale Partner", "$$", "★★", "★★★★"],
+      ["▣", "Webinars", "Webinare", "$", "★★★", "★★★★"],
+      ["♡", "Social media ads", "Social-Media-Anzeigen", "$$$", "★★★★", "★★"],
+    ];
+    const actionPlan = [
+      ["01", "♙", "Discover and align", "Verstehen und abstimmen", ["School information", "Past inquiries"], "Shared goals", "Stakeholder map"],
+      ["02", "◎", "Define ideal students", "Passende Lernende definieren", ["School goals", "Interview findings"], "Student-fit criteria", "Fit profile"],
+      ["03", "⌁", "Test channels", "Kanäle testen", ["Channel list", "Small budget"], "Two test channels", "Channel test plan"],
+      ["04", "☏", "Qualify and consult", "Prüfen und beraten", ["Consultation guide", "School fact pack"], "Qualified conversations", "Consultation record"],
+      ["05", "☑", "Guide the application", "Bewerbung begleiten", ["Document checklist", "Application steps"], "Complete applications", "Application tracker"],
+      ["06", "▥", "Review and improve", "Auswerten und verbessern", ["Results data", "Stakeholder feedback"], "Next-channel decision", "Review log"],
+    ];
+
+    return (
+      <>
+        <button className="back-button" onClick={() => setSelectedStudyUnit(null)}>← Back to courses</button>
+
+        <header className="panel ref-course-hero">
+          <div className="ref-hero-copy">
+            <span className="eyebrow">COURSE 1 · START HERE</span>
+            <h1>How an agency finds the right international students for one Japanese language school</h1>
+            <h2 lang="de">Wie eine Agentur passende internationale Lernende für eine japanische Sprachschule findet</h2>
+            <p>One real case, shown step by step—from first contact to enrollment and review.</p>
+            <p lang="de">Ein durchgängiges Beispiel, Schritt für Schritt: vom ersten Kontakt bis zur Einschreibung und Auswertung.</p>
+            <div className="ref-hero-chips">
+              {[["♙", "1 school partner", "Eine Partnerschule"], ["⊙", "International students", "Internationale Lernende"], ["⌁", "Data-informed", "Datengestützt"], ["✓", "Repeatable path", "Wiederholbarer Weg"]].map(([icon, en, de]) => (
+                <article key={en}><span>{icon}</span><div><strong>{en}</strong><em lang="de">{de}</em></div></article>
+              ))}
+            </div>
+          </div>
+          <div className="ref-status-stack">
+            <article className="status-pink"><span>⌂</span><div><small>ALREADY HAVE</small><strong>1 Japanese language school partner</strong><em lang="de">Eine bestehende Partnerschule</em></div></article>
+            <article className="status-blue"><span>?</span><div><small>UNKNOWN</small><strong>Which students and channels fit</strong><em lang="de">Welche Lernenden und Kanäle passen</em></div></article>
+            <article className="status-green"><span>◎</span><div><small>GOAL</small><strong>A repeatable student recruitment path</strong><em lang="de">Ein wiederholbarer Vermittlungsweg</em></div></article>
+          </div>
+        </header>
+
+        <section className="panel ref-roadmap-board">
+          <span className="eyebrow">6-PHASE CASE ROADMAP</span>
+          <div className="ref-roadmap">
+            {roadmap.map(([no, icon, title, de, note], index) => (
+              <article key={no}>
+                <b>{no}</b><span>{icon}</span><strong>{title}</strong><em lang="de">{de}</em><p>{note}</p>
+                {index < roadmap.length - 1 && <i>→</i>}
+              </article>
+            ))}
+          </div>
+          <p className="ref-disclaimer"><strong>Case roadmap:</strong> These six steps organize this example. They are not official CAPM domains or a universal project life cycle.</p>
+        </section>
+
+        <section className="panel ref-domain-board">
+          <div className="ref-section-head">
+            <div><span className="eyebrow">WHAT YOU LEARN IN THIS COURSE</span><h2>4 CAPM domains, one easy case</h2><p lang="de">Vier CAPM-Domänen, verbunden in einem leicht verständlichen Beispiel.</p></div>
+            <aside><strong>i</strong><span>Percentages are exam weights, not a phase order.<em lang="de">Die Prozentwerte sind Prüfungsanteile, keine Reihenfolge.</em></span></aside>
+          </div>
+          <div className="ref-domain-grid">
+            {domainCards.map((domain, domainIndex) => (
+              <article className={`ref-domain ref-domain-${domainIndex + 1}`} key={domain.id}>
+                <header><b>{domain.id}</b><div><h3>{domain.title}</h3><h4 lang="de">{domain.de}</h4><p>{domain.subtitle}</p><p lang="de">{domain.subtitleDe}</p></div><strong>{domain.weight}<small>exam weight</small></strong></header>
+                <div className="ref-domain-flow">
+                  {domain.steps.map(([icon, en, de], index) => (
+                    <div key={en}><span>{icon}</span><strong>{en}</strong><em lang="de">{de}</em>{index < domain.steps.length - 1 && <i>→</i>}</div>
+                  ))}
+                </div>
+                <p className="ref-case"><strong>In this case:</strong> {domain.caseEn}<em lang="de">{domain.caseDe}</em></p>
+                <footer><span>Evidence</span>{domain.evidence.map((item) => <strong key={item}>{item}</strong>)}</footer>
+              </article>
+            ))}
+          </div>
+          <p className="ref-domain-note">These are CAPM exam-content knowledge domains, not chronological project phases. <span lang="de">Dies sind Wissensbereiche der Prüfung, keine zeitliche Projektabfolge.</span></p>
+        </section>
+
+        <section className="panel ref-journey-board">
+          <div className="ref-section-title"><b>1</b><div><span className="eyebrow">ONE CASE, STEP BY STEP</span><h2>From first contact to school enrollment</h2><p lang="de">Vom ersten Kontakt bis zur Einschreibung an der Sprachschule</p></div></div>
+          <div className="ref-journey-scroll">
+            <div className="ref-journey-grid">
+              <div className="ref-journey-head-label">6 phases</div>
+              {journey.map((item) => <header key={item.no}><b>{item.no}</b><strong>{item.phase}</strong><em lang="de">{item.de}</em></header>)}
+              {[
+                ["♙", "Student", "Lernende Person", "student"],
+                ["♙", "Agency", "Agentur", "agency"],
+                ["⌂", "Language school", "Sprachschule", "school"],
+              ].map(([icon, title, de, field]) => (
+                <div className="ref-journey-row" key={field}>
+                  <aside><span>{icon}</span><strong>{title}</strong><em lang="de">{de}</em></aside>
+                  {journey.map((item) => <article key={item.no}><p>{item[field as "student" | "agency" | "school"]}</p></article>)}
+                </div>
+              ))}
+            </div>
+          </div>
+          <p className="ref-legal-note">The school decides admission. Japan’s immigration authority issues a Certificate of Eligibility (COE); a school or another eligible proxy in Japan may support the application. A COE does not guarantee a visa.</p>
+        </section>
+
+        <div className="ref-two-column">
+          <section className="panel ref-funnel-board">
+            <div className="ref-section-title"><b>2</b><div><span className="eyebrow">HOW INQUIRIES NARROW DOWN</span><h2>A quality funnel</h2></div></div>
+            <div className="ref-funnel">
+              {[["♙", "Many inquiries", "Viele Anfragen", "100%"], ["☏", "Qualified consultations", "Passende Beratungen", "30–40%"], ["▣", "Complete applications", "Vollständige Bewerbungen", "10–15%"], ["✓", "Accepted students", "Aufgenommene Lernende", "6–10%"], ["◇", "Enrolled learners", "Eingeschriebene Lernende", "5–8%"]].map(([icon, en, de, rate]) => (
+                <article key={en}><span>{icon}</span><strong>{en}</strong><em lang="de">{de}</em><b>{rate}</b></article>
+              ))}
+            </div>
+            <p className="ref-disclaimer">Illustrative conversion ranges only. Actual results vary by school, country, channel, intake, and applicant requirements.</p>
+          </section>
+          <section className="panel ref-channel-board">
+            <div className="ref-section-title"><b>3</b><div><span className="eyebrow">CHANNEL COMPARISON</span><h2>Compare before scaling</h2></div></div>
+            <div className="ref-channel-grid">
+              {channels.map(([icon, en, de, cost, speed, fit]) => (
+                <article key={en}><span>{icon}</span><strong>{en}</strong><em lang="de">{de}</em><dl><div><dt>Cost</dt><dd>{cost}</dd></div><div><dt>Speed</dt><dd>{speed}</dd></div><div><dt>Fit quality</dt><dd>{fit}</dd></div></dl></article>
+              ))}
+            </div>
+            <p className="ref-disclaimer">Ratings are hypotheses for the pilot—not general facts. Validate them with your own data.</p>
+          </section>
+        </div>
+
+        <section className="panel ref-experiment-board">
+          <div className="ref-section-title"><b>4</b><div><span className="eyebrow">TWO-WEEK EXPERIMENT BOARD</span><h2>Measure conversations that move students forward</h2><p lang="de">Beratungsgespräche messen, die Lernende wirklich weiterbringen</p></div></div>
+          <div className="ref-experiment-layout">
+            <div className="ref-experiment-table">
+              <div className="table-head"><span>Channel</span><span>Week 1</span><span>Week 2</span><span>Qualified conversations</span><span>Decision</span></div>
+              <div><strong>A · Webinars</strong><span>150 attendees</span><span>160 attendees</span><b>28</b><em>Continue</em></div>
+              <div><strong>B · Social media ads</strong><span>12,000 reach</span><span>13,500 reach</span><b>14</b><em>Improve or stop</em></div>
+            </div>
+            <div className="ref-principles">
+              <article><span>◇</span><strong>Agency is the bridge, not the final decision-maker.</strong><em lang="de">Die Agentur begleitet; Schule und Behörden treffen ihre eigenen Entscheidungen.</em></article>
+              <article><span>↗</span><strong>Start small, learn fast, and improve every week.</strong><em lang="de">Klein beginnen, schnell lernen und wöchentlich verbessern.</em></article>
+            </div>
+          </div>
+          <p className="ref-disclaimer">All experiment numbers are fictional teaching data.</p>
+        </section>
+
+        <section className="panel ref-situation-board">
+          <div className="ref-section-title"><b>5</b><div><span className="eyebrow">CURRENT SITUATION</span><h2>Know what is fixed and what is still unknown</h2><p lang="de">Feststehende Informationen und offene Fragen trennen</p></div></div>
+          <div className="ref-situation-grid">
+            <article className="known-card"><strong>✓ We already know</strong><ul><li>One partner school exists.</li><li>School courses, fees, dates, and requirements can be confirmed.</li><li>The goal is a reliable path from inquiry to enrollment.</li></ul></article>
+            <article className="unknown-card"><strong>? We do not know yet</strong><ul><li>Which countries and channels bring suitable students.</li><li>Which student profile best fits the school.</li><li>Where suitable students leave the process.</li></ul></article>
+            <article className="persona-card"><strong>Student persona example</strong><b>Vietnam · age 22</b><p>Wants an affordable course, a clear application process, and a schedule that fits the stated study goal.</p><small>Example only—not a rule for nationality or age.</small></article>
+            <article className="checklist-card"><strong>School-fit checklist</strong><ul><li>Course and level fit</li><li>Start-date fit</li><li>Tuition and budget understood</li><li>Application requirements understood</li><li>Location and support needs</li></ul></article>
+            <article className="matrix-card"><strong>Channel test matrix</strong><div><b>Channel</b><b>Reach</b><b>Fit</b><b>Cost</b></div>{[["Webinar","●●●○","●●●●","●○○○"],["Partners","●●○○","●●●●","●●○○"],["Social ads","●●●●","●●○○","●●●○"]].map((row)=><div key={row[0]}>{row.map((cell)=><span key={cell}>{cell}</span>)}</div>)}</article>
+          </div>
+        </section>
+
+        <section className="panel ref-action-board">
+          <div className="ref-section-title"><b>6</b><div><span className="eyebrow">PHASE-BY-PHASE ACTION PLAN</span><h2>Inputs become outputs and reusable deliverables</h2><p lang="de">Aus Eingaben werden Ergebnisse und wiederverwendbare Liefergegenstände</p></div></div>
+          <div className="ref-action-grid">
+            {actionPlan.map(([no, icon, title, de, inputs, output, deliverable]) => (
+              <article key={String(no)}><header><b>{no}</b><span>{icon as string}</span><strong>{title as string}</strong><em lang="de">{de as string}</em></header><small>INPUTS</small><ul>{(inputs as string[]).map((item)=><li key={item}>{item}</li>)}</ul><small>OUTPUT</small><p>{output as string}</p><footer><span>DELIVERABLE</span><strong>{deliverable as string}</strong></footer></article>
+            ))}
+          </div>
+        </section>
+
+        <div className="ref-two-column ref-metrics-layout">
+          <section className="panel ref-metrics-board">
+            <div className="ref-section-title"><b>7</b><div><span className="eyebrow">METRICS THAT MATTER</span><h2>Measure movement, not noise</h2></div></div>
+            <div className="ref-metrics-grid">
+              {[["☏","Inquiries","Anfragen","320"],["♙","Qualified consultations","Passende Beratungen","96"],["☑","Application completion","Vollständige Bewerbungen","68%"],["✓","Acceptance rate","Aufnahmequote","82%"],["◇","Enrollment rate","Einschreibequote","41%"]].map(([icon,en,de,value])=><article key={en}><span>{icon}</span><strong>{en}</strong><em lang="de">{de}</em><b>{value}</b></article>)}
+            </div>
+            <p className="ref-disclaimer">Fictional example metrics. Define the denominator and reporting period before comparing rates.</p>
+          </section>
+          <section className="panel ref-next-board">
+            <div className="ref-section-title"><b>8</b><div><span className="eyebrow">NEXT EXPERIMENT</span><h2>Decide with evidence</h2></div></div>
+            <div className="ref-kanban">
+              <article><strong>TO TEST</strong><span>YouTube information session · Vietnamese</span><span>Partner webinar co-host</span></article>
+              <article><strong>RUNNING</strong><span>Student testimonial video</span><span>School-life webinar</span></article>
+              <article><strong>LEARNED</strong><span>Broad ads were too costly</span><span>The first brochure was too long</span></article>
+            </div>
+          </section>
+        </div>
+
+        <section className="study-finish panel">
+          <div><span className="eyebrow">COURSE 1 CHECKPOINT</span><h2>Explain the case and the four domains separately.</h2><p lang="de">Erkläre zuerst den Fallablauf und danach die vier CAPM-Domänen als getrennte Wissensbereiche.</p><small>CAPM domain content: PMI ECO 2023 · Agency and conversion data: illustrative teaching case</small></div>
+          <div>
+            <button className={`button ${completed ? "secondary" : "primary"}`} onClick={() => markUnitComplete(0)}>{completed ? "✓ Course 1 complete" : "Mark Course 1 complete"}</button>
             <button className="button secondary" onClick={() => { setSelectedStudyUnit(null); window.scrollTo({ top: 0, behavior: "smooth" }); }}>Open Course 2</button>
           </div>
         </section>

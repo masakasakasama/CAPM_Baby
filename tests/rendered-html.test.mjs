@@ -112,7 +112,9 @@ test("ships overview and detailed courses with transparent public-source boundar
   assert.match(page, /No ChatGPT login/);
   assert.match(page, /COURSE 1/);
   assert.match(page, /COURSE 02/);
-  assert.match(page, /THE OFFICIAL CAPM MAP/);
+  assert.match(page, /4 CAPM domains, one easy case/);
+  assert.match(page, /The school decides admission/);
+  assert.match(page, /All experiment numbers are fictional teaching data/);
   assert.match(page, /not chronological project phases/);
   assert.match(layout, /CAPM — English × Deutsch/);
   assert.match(layout, /\/og\.png/);
@@ -123,8 +125,8 @@ test("ships overview and detailed courses with transparent public-source boundar
   assert.doesNotMatch(page, /window\.crypto\.randomUUID/);
   assert.doesNotMatch(page, /codex-preview|SkeletonPreview/);
   assert.doesNotMatch(packageJson, /react-loading-skeleton/);
-  assert.equal(JSON.parse(packageJson).version, "1.3.2");
-  assert.match(page, /const APP_VERSION = "1\.3\.2"/);
+  assert.equal(JSON.parse(packageJson).version, "1.4.0");
+  assert.match(page, /const APP_VERSION = "1\.4\.0"/);
   assert.equal(JSON.parse(hosting).d1, "DB");
   assert.match(migration, /CREATE TABLE `progress_documents`/);
 });
