@@ -188,27 +188,6 @@ summary:focus-visible {
   text-align: center;
 }
 
-.sidebar-card {
-  margin-top: auto;
-  padding: 16px;
-  border: 1px solid #dfeefa;
-  border-radius: 20px;
-  background: linear-gradient(145deg, var(--blue-soft), var(--pink-soft));
-}
-
-.sidebar-card span {
-  font-size: 12px;
-  font-weight: 800;
-}
-
-.sidebar-card p {
-  margin: 6px 0 12px;
-  color: var(--muted);
-  font-size: 11px;
-  line-height: 1.5;
-}
-
-.sidebar-card button,
 .sidebar-foot button {
   padding: 0;
   border: 0;
@@ -222,7 +201,7 @@ summary:focus-visible {
 .sidebar-foot {
   display: grid;
   gap: 8px;
-  margin-top: 16px;
+  margin-top: auto;
   padding: 0 5px;
 }
 
@@ -2494,21 +2473,6 @@ details p {
   display: none;
 }
 
-.toast {
-  position: fixed;
-  right: 24px;
-  bottom: 24px;
-  z-index: 50;
-  max-width: min(390px, calc(100vw - 32px));
-  padding: 13px 18px;
-  border-radius: 14px;
-  background: #28344c;
-  box-shadow: 0 15px 35px rgba(30, 36, 54, 0.25);
-  color: white;
-  font-size: 10px;
-  font-weight: 750;
-}
-
 .loading {
   display: grid;
   min-height: 100vh;
@@ -2951,10 +2915,6 @@ details p {
     padding-bottom: 60px;
   }
 
-  .toast {
-    right: 16px;
-    bottom: 92px;
-  }
 }
 
 @media (max-width: 390px) {

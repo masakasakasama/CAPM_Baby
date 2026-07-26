@@ -207,7 +207,6 @@ export default function Home() {
   const [syncId, setSyncId] = useState("");
   const [syncStatus, setSyncStatus] = useState<SyncStatus>("loading");
   const [lastSyncAt, setLastSyncAt] = useState<string | null>(null);
-  const [toast, setToast] = useState("");
   const [selectedStudyUnit, setSelectedStudyUnit] = useState<number | null>(null);
   const [practiceUnit, setPracticeUnit] = useState<number | "all">("all");
   const [practiceQuestionId, setPracticeQuestionId] = useState(questions[0].id);
@@ -449,12 +448,6 @@ export default function Home() {
     // Timer-driven submission is intentionally tied to the deadline.
   }, [now, exam]);
 
-  useEffect(() => {
-    if (!toast) return;
-    const timeout = window.setTimeout(() => setToast(""), 2600);
-    return () => window.clearTimeout(timeout);
-  }, [toast]);
-
   function openStudy(unit: number) {
     setSelectedStudyUnit(unit);
     setView("learn");
@@ -604,17 +597,6 @@ export default function Home() {
     setExam(null);
   }
 
-  async function copySyncLink() {
-    const defaultUrl = `${window.location.origin}${window.location.pathname}`;
-    try {
-      await saveCloud(progress, exam);
-      await navigator.clipboard.writeText(defaultUrl);
-      setToast("Default CAPM link copied · Standardlink kopiert");
-    } catch {
-      window.prompt("Copy the default CAPM link", defaultUrl);
-    }
-  }
-
   function syncLabel() {
     if (syncStatus === "saving") return "Saving… · Speichern…";
     if (syncStatus === "loading") return "Updating… · Aktualisieren…";
@@ -671,7 +653,6 @@ export default function Home() {
           <div><i /><span>{syncLabel()}</span></div>
           <div>
             <button onClick={() => void pullCloud(false)}>Refresh now</button>
-            <button onClick={() => void copySyncLink()}>Copy default link</button>
           </div>
         </section>
 
@@ -1258,7 +1239,7 @@ export default function Home() {
             <p>The default CAPM URL loads and updates one shared cloud record on every device. No special query link is required. The device cache is only a fast offline fallback.</p>
             <p lang="de">Der Standardlink verbindet alle Geräte automatisch mit demselben Lernstand. Kein ChatGPT-Konto erforderlich.</p>
             <div className={`sync-state ${syncStatus}`}><i />{syncLabel()}</div>
-            <div><button className="button primary" onClick={() => void copySyncLink()}>Copy default link</button><button className="button secondary" onClick={() => void pullCloud(false)}>Refresh now</button></div>
+            <div><button className="button secondary" onClick={() => void pullCloud(false)}>Refresh now</button></div>
           </section>
         </div>
         <section className="panel disclaimer">
@@ -1291,9 +1272,6 @@ export default function Home() {
             </button>
           ))}
         </nav>
-        <div className="sidebar-card">
-          <span>Automatic sync</span><p>One default link on every device.</p><button onClick={() => void copySyncLink()}>Copy default link</button>
-        </div>
         <div className="sidebar-foot">
           <button onClick={() => setView("sources")}>Sources, data & copyright</button>
           <small>v{APP_VERSION} · cloud sync + offline fallback</small>
@@ -1316,7 +1294,6 @@ export default function Home() {
           </button>
         ))}
       </nav>
-      {toast && <div className="toast" role="status">{toast}</div>}
     </div>
   );
 }
